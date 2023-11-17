@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Ingredient.h"
 #include "Bread.generated.h"
 
 UCLASS()
-class PAING2_API ABread : public AActor
+class PAING2_API ABread : public AIngredient
 {
 	GENERATED_BODY()
 	
