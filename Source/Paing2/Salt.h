@@ -9,8 +9,6 @@
 #include "Salt.generated.h"
 
 
-constexpr std::string SaltName = "Salt";
-
 /**
  * 
  */

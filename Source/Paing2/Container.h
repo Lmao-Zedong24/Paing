@@ -3,42 +3,52 @@
 #pragma once
 
 #include "Recipe.h"
+#include "Ingredient.h"
+#include "ContainerOpening.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Container.generated.h"
 
-UCLASS()
-class PAING2_API AContainer : public AActor
+
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class PAING2_API UContainer : public USceneComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AContainer();
+	UContainer(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UFUNCTION(BlueprintCallable)
-	void GrabIngredient();
+	bool TryAddIngredient(AIngredient* ingredient);
+
+	UFUNCTION(BlueprintCallable)
+	bool TryRemoveIngredient(AIngredient* ingredient);
+
+	UFUNCTION(BlueprintCallable)
+	void DeleteContainingIngredients();
+
+	const TMap<FName, FIngredientInfo>& GetIngredients();
+	//void PourLiquid();	
 
 protected:
+	UPROPERTY(BlueprintReadWrite)
+	float maxLiquidVolume;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadWrite)
-	UStaticMeshComponent* mesh;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-
-	void AddIngredient(TSubclassOf<AIngredient> ingredient, float quantity);
-	AIngredient* CreateRecipeResult();
 
 
 private:
-	UPROPERTY()
-	TArray<URecipe*> m_recipies;
 
-	FIngredientList m_containingIngredients;
+
+	//UPROPERTY()
+	//TArray<URecipe*> m_recipies;
+	UPROPERTY()
+	TMap<FName, FIngredientInfo>	m_containingIngredients;
+	float						m_liquidVolume;
 };

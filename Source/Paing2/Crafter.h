@@ -2,31 +2,27 @@
 
 #pragma once
 
-#include "Ingredient.h"
-
 #include "CoreMinimal.h"
-#include "Bo_oh_o_wa_er.generated.h"
+#include "GameFramework/Actor.h"
+#include "Crafter.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class PAING2_API ABo_oh_o_wa_er : public AIngredient
+class PAING2_API ACrafter : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
-	ABo_oh_o_wa_er();
-
+	ACrafter();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+	virtual bool TryCraft();
 
-private:
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
-	
 };

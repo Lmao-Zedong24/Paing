@@ -3,7 +3,8 @@
 
 #include "Salt.h"
 
-ASalt::ASalt()
+ASalt::ASalt() :
+	Super("Salt", { 1.0f, AIngredient::Quantity::EType::U })
 {
 }
 
