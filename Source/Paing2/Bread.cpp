@@ -4,11 +4,9 @@
 #include "Bread.h"
 
 // Sets default values
-ABread::ABread()
+ABread::ABread() :
+	AIngredient("Bread", { 1.0f, AIngredient::Quantity::EType::U })
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
