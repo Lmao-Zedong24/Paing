@@ -5,7 +5,7 @@
 
 // Sets default values
 ABread::ABread() :
-	AIngredient("Bread", { 1.0f, AIngredient::Quantity::EType::U })
+	AIngredient("Bread", 1.0f)
 {
 }
 

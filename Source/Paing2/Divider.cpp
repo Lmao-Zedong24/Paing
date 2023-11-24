@@ -43,6 +43,7 @@ void ADivider::Tick(float DeltaTime)
 bool ADivider::TryCraft()
 {
 	const auto& ingredients = Container->GetIngredients();
+
 	float quality = m_recipe->EvaluateQuality(ingredients);
 
 	if (quality == 100) //perfect

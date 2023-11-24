@@ -11,12 +11,18 @@ AIngredient::AIngredient()
 }
 
 // Sets default values
-AIngredient::AIngredient(FName name, Quantity quantity) :
+AIngredient::AIngredient(FName name, float quantity) :
 	m_name(name),
-	m_quantity(quantity)
+	m_amount(quantity)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AIngredient::InitAIngredient(FName name, float amount)
+{
+	m_name = name;
+	m_amount = amount;
 }
 
 
@@ -39,9 +45,9 @@ const FName& AIngredient::GetIngredientName()
 	return this->m_name;
 }
 
-const AIngredient::Quantity& AIngredient::GetIngredientQuantity()
+const float& AIngredient::GetIngredientAmount()
 {
-	return this->m_quantity;
+	return this->m_amount;
 }
 
 
@@ -81,7 +87,7 @@ void FIngredientInfo::Add(AIngredient* ingredient)
 	if (isInSet)
 		return;
 
-	m_totalAmount += ingredient->GetIngredientQuantity().m_amount;
+	m_totalAmount += ingredient->GetIngredientAmount();
 }
 
 void FIngredientInfo::Remove(AIngredient* ingredient)
@@ -89,5 +95,5 @@ void FIngredientInfo::Remove(AIngredient* ingredient)
 	int num = m_ingredients.Remove(ingredient);
 
 	if (num != 0)
-		m_totalAmount -= ingredient->GetIngredientQuantity().m_amount;
+		m_totalAmount -= ingredient->GetIngredientAmount();
 }
