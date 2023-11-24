@@ -25,8 +25,8 @@ protected:
 	UPROPERTY(Category = Appliance, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
-	UPROPERTY(Category = Appliance, EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<USceneComponent> SpawnPoints;
+	UPROPERTY(Category = Appliance, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneComponent> SpawnPointsParent;
 
 	UPROPERTY(Category = Appliance, EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	URecipe* m_recipe;
@@ -38,5 +38,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	bool TryCraft();
+
+private:
+	static inline FName MeshComponentName = TEXT("Mesh");
+	static inline FName ContainerComponentName = TEXT("Container");
+	static inline FName SceneComponentComponentName = TEXT("SpawnPointsParent");
+
+	TArray<USceneComponent*> m_spawnPoints;
 
 };

@@ -6,8 +6,7 @@
 
 
 // Sets default values
-UContainer::UContainer(const FObjectInitializer& ObjectInitializer) : 
-	Super(ObjectInitializer)
+UContainer::UContainer(const FObjectInitializer& ObjectInitializer)
 {
 
 
@@ -38,6 +37,10 @@ bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
 	if (otherIngredient->IsLiquid())
 		m_liquidVolume += otherAmount;
 
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString(TEXT("Has : ")) + FString::FromInt(m_containingIngredients.Num()));
+
+
 	return true;
 }
 
@@ -64,22 +67,36 @@ bool UContainer::TryRemoveIngredient(AIngredient* otherIngredient)
 
 void UContainer::DeleteContainingIngredients()
 {
+	//if (GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString(TEXT("Has : ")) + FString::FromInt(m_containingIngredients.Num()));
 	for (auto& ingredientInfo : m_containingIngredients)
 	{
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString(TEXT("is : ")) + FString::FromInt(ingredientInfo.Value.m_ingredients.Num()));
+
 		for (AIngredient*& ingredient : ingredientInfo.Value.m_ingredients)
 		{
 			if (ingredient == nullptr && GEngine)
+			{
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Ingredient Not Valid"));
+				return;
+			}
 
 			auto temp = ingredient;
-			ingredient = nullptr;
+			ingredient = nullptr;	
 			
+			//if (GEngine)
+			//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("TP ingredient"));
+
+			//temp->TeleportTo(FVector(-500, -500, -500), FRotator::ZeroRotator);
+
+			// TODO: put destroy
 			if (!temp->Destroy() && GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Ingredient Not Destroyed"));
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT(""));
 		}
 	}
 
-	m_containingIngredients.Reset();
+	m_containingIngredients.Empty();
 }
 
 const TMap<FName, FIngredientInfo>& UContainer::GetIngredients()

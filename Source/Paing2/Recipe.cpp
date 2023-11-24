@@ -28,7 +28,10 @@ size_t URecipe::NumCommonIngredients(const TMap<FName, FIngredientInfo>& ingredi
 float URecipe::EvaluateQuality(const TMap<FName, FIngredientInfo>& ingredients)
 {
 	if (m_ingredientList.IsEmpty() && GEngine)
+	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NO INGREDIENTS IN RECIPE"));
+		return 100;
+	}
 
 	float q = NumCommonIngredients(ingredients) * (100.0f / (float)m_ingredientList.Num());
 	//float q = (float)m_ingredientList.Num();
