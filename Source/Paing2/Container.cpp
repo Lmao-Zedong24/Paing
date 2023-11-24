@@ -22,7 +22,7 @@ void UContainer::BeginPlay()
 bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
 {
 	FName otherName = otherIngredient->GetIngredientName();
-	float otherAmount = otherIngredient->GetIngredientQuantity().m_amount;
+	float otherAmount = otherIngredient->GetIngredientAmount();
 
 	if (otherAmount < 0)
 		return false;
@@ -57,7 +57,7 @@ bool UContainer::TryRemoveIngredient(AIngredient* otherIngredient)
 			m_containingIngredients.Remove(name);
 
 		if (otherIngredient->IsLiquid())
-			m_liquidVolume -= otherIngredient->GetIngredientQuantity().m_amount;
+			m_liquidVolume -= otherIngredient->GetIngredientAmount();
 
 		return true;
 	}
@@ -67,8 +67,8 @@ bool UContainer::TryRemoveIngredient(AIngredient* otherIngredient)
 
 void UContainer::DeleteContainingIngredients()
 {
-	//if (GEngine)
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString(TEXT("Has : ")) + FString::FromInt(m_containingIngredients.Num()));
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString(TEXT("Has : ")) + FString::FromInt(m_containingIngredients.Num()));
 	for (auto& ingredientInfo : m_containingIngredients)
 	{
 		if (GEngine)
@@ -84,15 +84,9 @@ void UContainer::DeleteContainingIngredients()
 
 			auto temp = ingredient;
 			ingredient = nullptr;	
-			
-			//if (GEngine)
-			//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("TP ingredient"));
 
-			//temp->TeleportTo(FVector(-500, -500, -500), FRotator::ZeroRotator);
-
-			// TODO: put destroy
 			if (!temp->Destroy() && GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT(""));
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Didnt destroy"));
 		}
 	}
 

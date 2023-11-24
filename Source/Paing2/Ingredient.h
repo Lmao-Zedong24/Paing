@@ -27,34 +27,20 @@ struct PAING2_API FIngredientInfo
 };
 
 
-
 UCLASS()
 class PAING2_API AIngredient : public AActor
 {
 	GENERATED_BODY()
-	
-public:
-	
-	struct Quantity
-	{
-		enum class EType
-		{
-			U,
-			G,
-			KG,
-			L
-		};
-
-		float m_amount;
-		EType m_type;
-	};
 
 public:
 	AIngredient();
 
 protected:	
 	// Sets default values for this actor's properties
-	AIngredient(FName name, Quantity quantity);
+	AIngredient(FName name, float quantity);
+	
+	UFUNCTION(BlueprintCallable)
+	void InitAIngredient(FName name, float amount);
 
 protected:
 	// Called when the game starts or when spawned
@@ -62,7 +48,7 @@ protected:
 
 public:	
 	const FName& GetIngredientName();
-	const Quantity& GetIngredientQuantity();
+	const float& GetIngredientAmount();
 
 
 
@@ -81,9 +67,12 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere)
 	bool		m_isLiquid = false;
+	UPROPERTY(EditAnywhere)
 	FName		m_name;
-	Quantity	m_quantity;
+	UPROPERTY(EditAnywhere)
+	float		m_amount;
 
 	std::list<float> m_individualQualityPercents;
 
