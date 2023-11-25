@@ -2,6 +2,7 @@
 
 
 #include "Ingredient.h"
+#include "Container.h"
 
 
 AIngredient::AIngredient() 
@@ -18,13 +19,6 @@ AIngredient::AIngredient(FName name, float quantity) :
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
-
-void AIngredient::InitAIngredient(FName name, float amount)
-{
-	m_name = name;
-	m_amount = amount;
-}
-
 
 // Called when the game starts or when spawned
 void AIngredient::BeginPlay()
@@ -77,6 +71,28 @@ float AIngredient::GetAverageQualityPercent()
 	}
 
 	return averagePercent / lenght;
+}
+
+FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint)
+{
+	FHitResult hit;
+
+	FVector traceStart = startPoint;
+	FVector traceEnd = traceStart + FVector(0, 0, -MAX_TRACE_LENGTH);
+
+	FCollisionQueryParams queryParams;
+	queryParams.AddIgnoredActor(actor);
+
+	actor->GetWorld()->LineTraceSingleByChannel(hit, traceStart, traceEnd, TraceChannelProperty, queryParams);
+	DrawDebugLine(actor->GetWorld(), traceStart, traceEnd, hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.0f, 0, 10.0f);
+
+	//if (!(hit.bBlockingHit && IsValid(hit.GetActor()) && GEngine))
+	//{
+	//	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("NO LIQUID HIT"));
+	//	return;
+	//}
+
+	return hit;
 }
 
 void FIngredientInfo::Add(AIngredient* ingredient)

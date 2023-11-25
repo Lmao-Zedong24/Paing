@@ -27,9 +27,19 @@ public:
 	bool TryRemoveIngredient(AIngredient* ingredient);
 
 	UFUNCTION(BlueprintCallable)
+	bool TryAddAmount(TSubclassOf<AIngredient> ingredient, float amount);
+
+	UFUNCTION(BlueprintCallable)
+	bool TryRemoveAmount(TSubclassOf<AIngredient> ingredient, float amount);
+
+
+	UFUNCTION(BlueprintCallable)
 	void DeleteContainingIngredients();
 
 	const TMap<FName, FIngredientInfo>& GetIngredients();
+
+	UFUNCTION(BlueprintCallable)
+	TSet<FName> GetIngredientNames();
 	//void PourLiquid();	
 
 protected:
@@ -50,5 +60,5 @@ private:
 	//TArray<URecipe*> m_recipies;
 	UPROPERTY()
 	TMap<FName, FIngredientInfo>	m_containingIngredients;
-	float						m_liquidVolume;
+	float							m_liquidVolume;
 };
