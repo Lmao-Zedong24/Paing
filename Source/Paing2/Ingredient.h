@@ -9,6 +9,9 @@
 #include "Ingredient.generated.h"
 
 
+constexpr float MAX_TRACE_LENGTH = 5000.0f;
+constexpr ECollisionChannel TraceChannelProperty = ECC_PhysicsBody;
+
 USTRUCT()
 struct PAING2_API FIngredientInfo
 {
@@ -16,6 +19,7 @@ struct PAING2_API FIngredientInfo
 
 	FIngredientInfo() : m_totalAmount(), m_ingredients() {};
 	FIngredientInfo(AIngredient* ingredient) : m_totalAmount(), m_ingredients() { Add(ingredient); };
+	FIngredientInfo(float amount) : m_totalAmount(amount), m_ingredients() {};
 
 	float					m_totalAmount;
 
@@ -38,9 +42,7 @@ public:
 protected:	
 	// Sets default values for this actor's properties
 	AIngredient(FName name, float quantity);
-	
-	UFUNCTION(BlueprintCallable)
-	void InitAIngredient(FName name, float amount);
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -49,8 +51,6 @@ protected:
 public:	
 	const FName& GetIngredientName();
 	const float& GetIngredientAmount();
-
-
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -64,6 +64,8 @@ public:
 	/// <returns>from 0.0 to 100.0 inclusive</returns>
 	float GetAverageQualityPercent();
 
+	UFUNCTION(BlueprintCallable)
+	static FHitResult PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint);
 
 protected:
 
