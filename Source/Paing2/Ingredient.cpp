@@ -84,7 +84,7 @@ FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> 
 	queryParams.AddIgnoredActor(actor);
 
 	actor->GetWorld()->LineTraceSingleByChannel(hit, traceStart, traceEnd, TraceChannelProperty, queryParams);
-	DrawDebugLine(actor->GetWorld(), traceStart, traceEnd, hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 0.2f, 0, 5.0f);
+	DrawDebugLine(actor->GetWorld(), traceStart, traceEnd, hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 0.2f, 0, 1.0f);
 
 	//if (!(hit.bBlockingHit && IsValid(hit.GetActor()) && GEngine))
 	//{

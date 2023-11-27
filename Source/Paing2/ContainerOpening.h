@@ -12,26 +12,23 @@ class PAING2_API UContainerOpening : public USceneComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:	 
 	// Sets default values for this component's properties
 	UContainerOpening();
 
+	UFUNCTION(BlueprintCallable)
 	FVector GetLowestPointOnOpening();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-
-	UPROPERTY(EditDefaultsOnly)
-	float radius;
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-private:
-	
+	float GetRadius()const;
 
-		
+private:
+	float m_radius_m;
 };
