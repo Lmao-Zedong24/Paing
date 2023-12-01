@@ -6,7 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "VRBase.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class PAING2_API AVRBase : public APawn
 {
 	GENERATED_BODY()
