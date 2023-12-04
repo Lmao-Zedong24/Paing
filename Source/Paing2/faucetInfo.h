@@ -10,18 +10,18 @@
  * 
  */
 UCLASS(BlueprintType)
-class PAING2_API UfaucetInfo : public UDataAsset
+class PAING2_API UfaucetInfo : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere)
 	float waterSpeed_LperS;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere)
 	float maxWaterAmount;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere)
 	float curentwaterAmount;
 
 };

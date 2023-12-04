@@ -39,23 +39,19 @@ void AKneader::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-bool AKneader::TryCraft()
+void AKneader::Craft()
 {
-	const auto& ingredients = Container->GetIngredients();
-	float quality = m_recipe->EvaluateQuality(ingredients);
+	Container->DeleteContainingIngredients();
 
-	if (quality == 100) //perfect
-	{
-		Container->DeleteContainingIngredients();
+	auto& result = m_recipe->GetResult();
+	auto& transform = SpawnPoint->GetComponentTransform();
+	auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, transform);
+}
 
-		auto result = m_recipe->GetResult();
-		auto transform = SpawnPoint->GetComponentTransform();
-		auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, transform);
+bool AKneader::CanCraft()
+{
+	float quality = m_recipe->EvaluateQuality(Container->GetIngredients());
 
-
-		return true;
-	}
-
-	return false;
+	return quality == 100;
 }
 

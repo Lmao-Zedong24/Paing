@@ -18,7 +18,12 @@ void ACrafter::BeginPlay()
 	
 }
 
-bool ACrafter::TryCraft()
+bool ACrafter::CanCraft()
+{
+	return false;
+}
+
+bool ACrafter::Craft()
 {
 	return false;
 }

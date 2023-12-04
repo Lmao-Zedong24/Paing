@@ -19,7 +19,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual bool TryCraft();
+	virtual bool CanCraft();
+
+	virtual bool Craft();
 
 public:	
 	// Called every frame
