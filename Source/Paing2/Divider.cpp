@@ -40,26 +40,21 @@ void ADivider::Tick(float DeltaTime)
 
 }
 
-bool ADivider::TryCraft()
+void ADivider::Craft()
 {
-	const auto& ingredients = Container->GetIngredients();
+	Container->DeleteContainingIngredients();
 
-	float quality = m_recipe->EvaluateQuality(ingredients);
+	auto result = m_recipe->GetResult();
 
-	if (quality == 100) //perfect
-	{
-		Container->DeleteContainingIngredients();
+	for (auto& pts : m_spawnPoints)
+		auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, pts->GetComponentTransform());
+}
 
-		auto result = m_recipe->GetResult();
+bool ADivider::CanCraft()
+{
+	float quality = m_recipe->EvaluateQuality(Container->GetIngredients());
 
-		for (auto& pts : m_spawnPoints)
-			auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, pts->GetComponentTransform());
-
-
-		return true;
-	}
-
-	return false;
+	return quality == 100;
 }
 
 

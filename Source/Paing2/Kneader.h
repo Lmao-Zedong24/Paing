@@ -23,22 +23,25 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(Category = Appliance, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UContainer> Container;
 
-	UPROPERTY(Category = Appliance, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
-	UPROPERTY(Category = Appliance, EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* SpawnPoint;
 
-	UPROPERTY(Category = Appliance, EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	URecipe* m_recipe;
 
 public:	
 
 	UFUNCTION(BlueprintCallable)
-	bool TryCraft();
+	void Craft();
+
+	UFUNCTION(BlueprintCallable)
+	bool CanCraft();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
