@@ -109,10 +109,10 @@ void UContainer::DeleteContainingIngredients()
 	for (auto& ingredientInfo : m_containingIngredients)
 	{
 		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString(TEXT("is : ")) + FString::FromInt(ingredientInfo.Value.m_ingredients.Num()));
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString(TEXT("is : ")) + FString::FromInt(ingredientInfo.Value.m_ingredientActors.Num()));
 
 		//reference is important
-		for (AIngredient*& ingredient : ingredientInfo.Value.m_ingredients)
+		for (AIngredient*& ingredient : ingredientInfo.Value.m_ingredientActors)
 		{
 			if (ingredient == nullptr && GEngine)
 			{
@@ -144,6 +144,20 @@ TSet<FName> UContainer::GetIngredientNames()
 	TSet<FName> keys;
 	m_containingIngredients.GetKeys(keys);
 	return keys;
+}
+
+bool UContainer::GetQuality()
+{
+	for (auto& ingInfo : m_containingIngredients)
+	{
+		for (auto& ing : ingInfo.Value.m_ingredientActors)
+		{
+			if (!ing->isGoodQuality)
+				return false;
+		}
+	}
+
+	return true;
 }
 
 

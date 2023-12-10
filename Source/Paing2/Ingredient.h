@@ -17,14 +17,14 @@ struct PAING2_API FIngredientInfo
 {
 	GENERATED_BODY()
 
-	FIngredientInfo() : m_totalAmount(), m_ingredients() {};
-	FIngredientInfo(AIngredient* ingredient) : m_totalAmount(), m_ingredients() { Add(ingredient); };
-	FIngredientInfo(float amount) : m_totalAmount(amount), m_ingredients() {};
+	FIngredientInfo() : m_totalAmount(), m_ingredientActors() {};
+	FIngredientInfo(AIngredient* ingredient) : m_totalAmount(), m_ingredientActors() { Add(ingredient); };
+	FIngredientInfo(float amount) : m_totalAmount(amount), m_ingredientActors() {};
 
 	float					m_totalAmount;
 
 	UPROPERTY()
-	TSet<AIngredient*>		m_ingredients;
+	TSet<AIngredient*>		m_ingredientActors;
 
 	void Add(AIngredient* ingredient);
 	void Remove(AIngredient* ingredient);
@@ -55,17 +55,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
 	bool IsLiquid();
 
-	/// <param name="qualityPercent"> float from 0.0 to 100.0 inclusive</param>
+	UFUNCTION(BlueprintCallable)
 	void AddQualityPercent(float qualityPercent);
-
-	/// <returns>from 0.0 to 100.0 inclusive</returns>
-	float GetAverageQualityPercent();
 
 	UFUNCTION(BlueprintCallable)
 	static FHitResult PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint);
+
+	UPROPERTY(EditAnywhere)
+	bool isGoodQuality;
 
 protected:
 

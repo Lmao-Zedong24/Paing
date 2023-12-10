@@ -16,7 +16,7 @@ URecipe::~URecipe()
 size_t URecipe::NumCommonIngredients(const TMap<FName, FIngredientInfo>& ingredients)
 {
 	size_t numCommonIngredients = 0;
-	for (auto& recipeIngredient : m_ingredientList)
+	for (auto& recipeIngredient : m_ingredientListMinMax)
 	{
 		if (ingredients.Contains(recipeIngredient.Key.GetDefaultObject()->GetIngredientName()))
 			numCommonIngredients++;
@@ -25,24 +25,45 @@ size_t URecipe::NumCommonIngredients(const TMap<FName, FIngredientInfo>& ingredi
 	return numCommonIngredients;
 }
 
-float URecipe::EvaluateQuality(const TMap<FName, FIngredientInfo>& ingredients)
+bool URecipe::RecipieIsGood(const TMap<FName, FIngredientInfo>& ingredients)
 {
-	if (m_ingredientList.IsEmpty() && GEngine)
+	for (auto& recipeIngredient : m_ingredientListMinMax)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NO INGREDIENTS IN RECIPE"));
-		return 100;
+		auto& name = recipeIngredient.Key.GetDefaultObject()->GetIngredientName();
+		auto ing = ingredients.Find(name);
+
+		if (ing == nullptr || EvaluateIngredient(*ing, recipeIngredient.Value))
+		{
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString("Quality : Bad"));
+
+			return false;
+		}
 	}
 
-	float q = NumCommonIngredients(ingredients) * (100.0f / (float)m_ingredientList.Num());
-	//float q = (float)m_ingredientList.Num();
-
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString("Quality : ") + FString::SanitizeFloat(q));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString("Quality : Good"));
 
-	return q;
+	return true;
+}
+
+bool URecipe::EvaluateQuality(const TMap<FName, FIngredientInfo>& ingredients)
+{
+	if (m_ingredientListMinMax.IsEmpty() && GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NO INGREDIENTS IN RECIPE"));
+		return true;
+	}
+
+	return RecipieIsGood(ingredients);
 }
 
 const TSubclassOf<AIngredient>& URecipe::GetResult()
 {
 	return m_result;
+}
+
+bool URecipe::EvaluateIngredient(const FIngredientInfo& ingredient, FVector minMax)
+{
+	return minMax.X <= ingredient.m_totalAmount && ingredient.m_totalAmount <= minMax.Y;
 }
