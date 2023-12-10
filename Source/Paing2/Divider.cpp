@@ -46,15 +46,24 @@ void ADivider::Craft()
 
 	auto result = m_recipe->GetResult();
 
+	bool quality = Container->GetQuality();
+
 	for (auto& pts : m_spawnPoints)
+	{
 		auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, pts->GetComponentTransform());
+		bpIngredient->isGoodQuality = quality;
+	}
 }
 
 bool ADivider::CanCraft()
 {
-	float quality = m_recipe->EvaluateQuality(Container->GetIngredients());
+	size_t num = m_recipe->NumCommonIngredients(Container->GetIngredients());
 
-	return quality == 100;
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(num));
+
+
+	return num != 0;
 }
 
 

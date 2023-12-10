@@ -42,19 +42,18 @@ public:
 	TSet<FName> GetIngredientNames();
 	//void PourLiquid();	
 
+	UFUNCTION(BlueprintCallable)
+	bool GetQuality();
+
 protected:
-	UPROPERTY(BlueprintReadWrite)
-	float maxLiquidVolume;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 
 public:	
 
 
 private:
-
 
 	//UPROPERTY()
 	//TArray<URecipe*> m_recipies;

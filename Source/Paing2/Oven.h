@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveBakeable(AActor* actor, UBakeable* bakeable);
 
+	UFUNCTION(BlueprintCallable)
+	void DoorState(bool isClosed);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -34,4 +37,6 @@ public:
 private:
 	UPROPERTY()
 	TMap<AActor*, UBakeable*> m_bakeables;
+
+	bool m_closedDoors;
 };

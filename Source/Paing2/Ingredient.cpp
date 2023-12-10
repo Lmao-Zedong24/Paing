@@ -57,22 +57,6 @@ void AIngredient::AddQualityPercent(float qualityPercent)
 	m_individualQualityPercents.emplace_back(qualityPercent);
 }
 
-float AIngredient::GetAverageQualityPercent()
-{
-	if (m_individualQualityPercents.empty())
-		return 100.0f;
-
-	size_t lenght = 0;
-	float averagePercent = 0;
-	for (auto& percent : m_individualQualityPercents)
-	{
-		averagePercent += percent;
-		lenght++;
-	}
-
-	return averagePercent / lenght;
-}
-
 FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint)
 {
 	FHitResult hit;
@@ -98,7 +82,7 @@ FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> 
 void FIngredientInfo::Add(AIngredient* ingredient)
 {
 	bool isInSet = false;
-	auto i = m_ingredients.FindOrAdd(ingredient, &isInSet);
+	auto i = m_ingredientActors.FindOrAdd(ingredient, &isInSet);
 	
 	if (isInSet)
 		return;
@@ -108,7 +92,7 @@ void FIngredientInfo::Add(AIngredient* ingredient)
 
 void FIngredientInfo::Remove(AIngredient* ingredient)
 {
-	int num = m_ingredients.Remove(ingredient);
+	int num = m_ingredientActors.Remove(ingredient);
 
 	if (num != 0)
 		m_totalAmount -= ingredient->GetIngredientAmount();
