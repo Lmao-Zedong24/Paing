@@ -44,7 +44,7 @@ void UBakeable::AddBakeTime(float deltaTime_s)
 	if (m_bakeStageTimeStamps.IsEmpty())
 	{
 		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("BakeTimeHit"));
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NoBakeTime"));
 
 		return;
 	}
