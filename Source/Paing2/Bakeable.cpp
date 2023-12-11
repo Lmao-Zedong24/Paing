@@ -25,6 +25,10 @@ void UBakeable::BeginPlay()
 	// ...	
 	m_mesh = dynamic_cast<UStaticMeshComponent*>(GetOwner()->GetRootComponent());
 
+	//m_dynamicMaterial = UMaterialInstanceDynamic::Create(m_mesh->GetMaterial(0), m_mesh);
+	//m_mesh->SetMaterial(0, m_dynamicMaterial);
+
+
 	if (m_bakeStageTimeStamps.Num() != m_bakeStageMaterial.Num())
 	{
 		if (GEngine)
