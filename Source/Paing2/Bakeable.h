@@ -39,6 +39,8 @@ public:
 private:
 	UPROPERTY()
 	UStaticMeshComponent* m_mesh;
+	//UMaterialInstanceDynamic* m_dynamicMaterial;
+
 
 	float	m_bakeTime_s;
 	int		m_bakeStage;
