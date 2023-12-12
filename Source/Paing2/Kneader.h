@@ -52,4 +52,6 @@ private:
 	static inline FName ContainerComponentName =	TEXT("Container");
 	static inline FName SpawnPointComponentName =	TEXT("SpawnPoint");
 
+	bool isInOrder;
+
 };

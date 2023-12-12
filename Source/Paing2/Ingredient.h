@@ -18,10 +18,11 @@ struct PAING2_API FIngredientInfo
 	GENERATED_BODY()
 
 	FIngredientInfo() : m_totalAmount(), m_ingredientActors() {};
-	FIngredientInfo(AIngredient* ingredient) : m_totalAmount(), m_ingredientActors() { Add(ingredient); };
-	FIngredientInfo(float amount) : m_totalAmount(amount), m_ingredientActors() {};
+	FIngredientInfo(AIngredient* ingredient, size_t order) : m_totalAmount(), m_order(order), m_ingredientActors() { Add(ingredient); };
+	FIngredientInfo(float amount, size_t order) : m_totalAmount(amount), m_order(order), m_ingredientActors() {};
 
 	float					m_totalAmount;
+	size_t					m_order;
 
 	UPROPERTY()
 	TSet<AIngredient*>		m_ingredientActors;
@@ -58,13 +59,19 @@ public:
 	bool IsLiquid();
 
 	UFUNCTION(BlueprintCallable)
-	void AddQualityPercent(float qualityPercent);
+	int EvaluateStars(bool isGoodBake);
 
 	UFUNCTION(BlueprintCallable)
 	static FHitResult PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint);
 
 	UPROPERTY(EditAnywhere)
 	bool isGoodQuality;
+
+	UPROPERTY(EditAnywhere)
+	bool isInOrder;
+
+	UPROPERTY(EditAnywhere)
+	bool isHitFloor;
 
 protected:
 

@@ -39,6 +39,8 @@ public:
 	/// <param name="ingredients"></param>
 	/// <returns>form 0.0 to 100.0 percent</returns>
 	bool EvaluateQuality(const TMap<FName, FIngredientInfo>& ingredients);
+	bool EvaluateOrder(const TMap<FName, FIngredientInfo>& ingredients);
+
 	const TSubclassOf<AIngredient>& GetResult();
 
 private:
@@ -48,6 +50,9 @@ private:
 	///name and quantity
 	UPROPERTY(EditDefaultsOnly)
 	TMap<TSubclassOf<AIngredient>, FVector> m_ingredientListMinMax;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<TSubclassOf<AIngredient>> m_order;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AIngredient> m_result;

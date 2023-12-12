@@ -50,11 +50,14 @@ bool AIngredient::IsLiquid()
 	return m_isLiquid;
 }
 
-void AIngredient::AddQualityPercent(float qualityPercent)
+int AIngredient::EvaluateStars(bool isGoodBake)
 {
-	qualityPercent = std::clamp(qualityPercent, 0.0f, 100.0f);
-
-	m_individualQualityPercents.emplace_back(qualityPercent);
+	return	isGoodQuality && isInOrder && isGoodBake ?		5:
+			!isGoodQuality && !isGoodBake ?					1:
+			!isGoodQuality && isGoodBake ?					2:
+			isGoodQuality && !isGoodBake ?					3:
+			isGoodQuality && (isInOrder || isGoodBake) ?	4: 
+															0;
 }
 
 FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint)

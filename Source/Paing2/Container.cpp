@@ -29,8 +29,11 @@ bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
 
 	float currentQuantity = m_containingIngredients.FindRef(otherName).m_totalAmount;
 
-	if (currentQuantity == 0) 
-		m_containingIngredients.Add(otherName, FIngredientInfo(otherIngredient));
+	if (currentQuantity == 0)
+	{
+		m_containingIngredients.Add(otherName, FIngredientInfo(otherIngredient, numIngredients));
+		numIngredients++;
+	}
 	else
 		m_containingIngredients[otherName].Add(otherIngredient);
 
@@ -55,7 +58,10 @@ bool UContainer::TryRemoveIngredient(AIngredient* otherIngredient)
 	ingredientInfo->Remove(otherIngredient);
 
 	if (ingredientInfo->m_totalAmount <= 0)
+	{
 		m_containingIngredients.Remove(name);
+		numIngredients--;
+	}
 
 	if (otherIngredient->IsLiquid())
 		m_liquidVolume -= otherIngredient->GetIngredientAmount();
@@ -73,7 +79,10 @@ bool UContainer::TryAddAmount(TSubclassOf<AIngredient> otherIngredient, float ot
 	float currentQuantity = m_containingIngredients.FindRef(otherName).m_totalAmount;
 
 	if (currentQuantity == 0)
-		m_containingIngredients.Add(otherName, FIngredientInfo(otherAmount));
+	{
+		m_containingIngredients.Add(otherName, FIngredientInfo(otherAmount, numIngredients));
+		numIngredients++;
+	}
 	else
 		m_containingIngredients[otherName].m_totalAmount += otherAmount;
 
@@ -94,7 +103,10 @@ bool UContainer::TryRemoveAmount(TSubclassOf<AIngredient> otherIngredient, float
 	ingredientInfo->m_totalAmount -= otherAmount;
 
 	if (ingredientInfo->m_totalAmount <= 0)
+	{
 		m_containingIngredients.Remove(otherName);
+		numIngredients--;
+	}
 
 	if (otherIngredient.GetDefaultObject()->IsLiquid())
 		m_liquidVolume -= otherAmount;

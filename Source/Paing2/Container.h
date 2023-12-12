@@ -60,4 +60,5 @@ private:
 	UPROPERTY()
 	TMap<FName, FIngredientInfo>	m_containingIngredients;
 	float							m_liquidVolume;
+	int								numIngredients;
 };
