@@ -14,6 +14,7 @@ AGround::AGround()
 void AGround::AddIngredient(AIngredient* ingredient)
 {
 	m_ingredients.Add(ingredient, TIME_BEFORE_DESTROY);
+	ingredient->isHitFloor |= true;
 }
 
 void AGround::RemoveIngredient(AIngredient* ingredient)
@@ -37,8 +38,10 @@ void AGround::Tick(float DeltaTime)
 
 	for (auto& ing : m_ingredients)
 	{
-		if (ing.Value -= DeltaTime <= 0);
+		if ((ing.Value -= DeltaTime) <= 0)
+		{
 			toDelete.Add(ing.Key);
+		}
 	}
 
 	for (auto& del : toDelete)
@@ -47,7 +50,7 @@ void AGround::Tick(float DeltaTime)
 		auto tmp = del;
 		del = nullptr;
 
-		Destroy(tmp);
+		tmp->Destroy();
 	}
 
 }

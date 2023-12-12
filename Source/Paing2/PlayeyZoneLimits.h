@@ -2,40 +2,31 @@
 
 #pragma once
 
-#include "Ingredient.h"
+#include "Engine/TriggerBox.h"
+
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Ground.generated.h"
+#include "PlayeyZoneLimits.generated.h"
 
 UCLASS()
-class PAING2_API AGround : public AActor
+class PAING2_API APlayeyZoneLimits : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AGround();
-
-protected:
-	UFUNCTION(BlueprintCallable)
-	void AddIngredient(AIngredient* ingredient);
-
-	UFUNCTION(BlueprintCallable)
-	void RemoveIngredient(AIngredient* ingredient);
+	APlayeyZoneLimits();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<ATriggerBox*> Limits;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-private:
-	inline static float TIME_BEFORE_DESTROY = 3.0f;
-
-	UPROPERTY()
-	TMap<AIngredient*, float> m_ingredients;
 };
