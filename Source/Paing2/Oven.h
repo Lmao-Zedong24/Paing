@@ -37,6 +37,4 @@ public:
 private:
 	UPROPERTY()
 	TMap<AActor*, UBakeable*> m_bakeables;
-
-	bool m_closedDoors;
 };
