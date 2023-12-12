@@ -23,7 +23,6 @@ void AOven::RemoveBakeable(AActor* actor, UBakeable* bake)
 
 void AOven::DoorState(bool isClosed)
 {
-	m_closedDoors = isClosed;
 }
 
 // Called when the game starts or when spawned	
@@ -37,9 +36,6 @@ void AOven::BeginPlay()
 void AOven::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (!m_closedDoors)
-		return;
 
 	for (auto& bakeable : m_bakeables)
 	{
