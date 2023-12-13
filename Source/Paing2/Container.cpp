@@ -15,8 +15,7 @@ UContainer::UContainer(const FObjectInitializer& ObjectInitializer)
 // Called when the game starts or when spawned
 void UContainer::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
 bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
@@ -36,6 +35,10 @@ bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
 	}
 	else
 		m_containingIngredients[otherName].Add(otherIngredient);
+
+	int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
+	if (val >= 0)
+		m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
 
 	if (otherIngredient->IsLiquid())
 		m_liquidVolume += otherAmount;
@@ -80,11 +83,15 @@ bool UContainer::TryAddAmount(TSubclassOf<AIngredient> otherIngredient, float ot
 
 	if (currentQuantity == 0)
 	{
-		m_containingIngredients.Add(otherName, FIngredientInfo(otherAmount, numIngredients));
+		m_containingIngredients.Add(otherName, FIngredientInfo(otherAmount, numIngredients, otherIngredient));
 		numIngredients++;
 	}
 	else
 		m_containingIngredients[otherName].m_totalAmount += otherAmount;
+
+	int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
+	if (val >= 0)
+		m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
 
 	if (otherIngredient.GetDefaultObject()->IsLiquid())
 		m_liquidVolume += otherAmount;
@@ -118,6 +125,10 @@ void UContainer::DeleteContainingIngredients()
 {
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString(TEXT("Has : ")) + FString::FromInt(m_containingIngredients.Num()));
+
+
+	m_recipeInfo.Empty();
+
 	for (auto& ingredientInfo : m_containingIngredients)
 	{
 		if (GEngine)
@@ -170,6 +181,16 @@ bool UContainer::GetQuality()
 	}
 
 	return true;
+}
+
+float UContainer::GetLiquidamount()
+{
+	return m_liquidVolume;
+}
+
+TMap<TSubclassOf<AIngredient>, int> UContainer::GetRecipeInfo()
+{
+	return m_recipeInfo;
 }
 
 

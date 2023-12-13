@@ -63,6 +63,16 @@ const TSubclassOf<AIngredient>& URecipe::GetResult()
 	return m_result;
 }
 
+int URecipe::GetRecipeHit(const FIngredientInfo& ingredientInfo)
+{
+	auto minMax = m_ingredientListMinMax[ingredientInfo.m_ing];
+
+	return	ingredientInfo.m_totalAmount < 0 ?			-1 :
+			ingredientInfo.m_totalAmount < minMax.X ?	0 :
+			ingredientInfo.m_totalAmount < minMax.Y ?	1 :
+														2;
+}
+
 bool URecipe::EvaluateIngredient(const FIngredientInfo& ingredient, FVector minMax)
 {
 	return minMax.X <= ingredient.m_totalAmount && ingredient.m_totalAmount <= minMax.Y;

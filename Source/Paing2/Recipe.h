@@ -43,6 +43,8 @@ public:
 
 	const TSubclassOf<AIngredient>& GetResult();
 
+	int GetRecipeHit(const FIngredientInfo& ingredient);
+
 private:
 	bool EvaluateIngredient(const FIngredientInfo& ingredient, FVector minMax);
 

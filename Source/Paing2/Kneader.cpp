@@ -30,7 +30,7 @@ void AKneader::BeginPlay()
 	if (m_recipe == nullptr && GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("SET RECIPE"));
 
-	
+	Container->Recipe = m_recipe;
 }
 
 // Called every frame

@@ -12,25 +12,6 @@
 constexpr float MAX_TRACE_LENGTH = 5000.0f;
 constexpr ECollisionChannel TraceChannelProperty = ECC_PhysicsBody;
 
-USTRUCT()
-struct PAING2_API FIngredientInfo
-{
-	GENERATED_BODY()
-
-	FIngredientInfo() : m_totalAmount(), m_ingredientActors() {};
-	FIngredientInfo(AIngredient* ingredient, size_t order) : m_totalAmount(), m_order(order), m_ingredientActors() { Add(ingredient); };
-	FIngredientInfo(float amount, size_t order) : m_totalAmount(amount), m_order(order), m_ingredientActors() {};
-
-	float					m_totalAmount;
-	size_t					m_order;
-
-	UPROPERTY()
-	TSet<AIngredient*>		m_ingredientActors;
-
-	void Add(AIngredient* ingredient);
-	void Remove(AIngredient* ingredient);
-};
-
 
 UCLASS()
 class PAING2_API AIngredient : public AActor
@@ -86,4 +67,32 @@ protected:
 
 private:
 
+};
+
+
+USTRUCT()
+struct PAING2_API FIngredientInfo
+{
+	GENERATED_BODY()
+
+	FIngredientInfo() : m_totalAmount(), m_ingredientActors() {};
+	FIngredientInfo(AIngredient* ingredient, size_t order) :
+		m_totalAmount(), m_order(order), m_ing(ingredient->GetClass())
+	{
+		Add(ingredient);
+	};
+	FIngredientInfo(float amount, size_t order, TSubclassOf<AIngredient> ing) :
+		m_totalAmount(amount), m_order(order), m_ing(ing)
+	{};
+
+	UPROPERTY()
+	float						m_totalAmount;
+	size_t						m_order;
+	TSubclassOf<AIngredient>	m_ing;
+
+	UPROPERTY()
+	TSet<AIngredient*>		m_ingredientActors;
+
+	void Add(AIngredient* ingredient);
+	void Remove(AIngredient* ingredient);
 };

@@ -45,6 +45,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool GetQuality();
 
+	UFUNCTION(BlueprintCallable)
+	float GetLiquidamount();
+
+	/// <returns> ingredient name, int 0 = ingredient added, 1 = Min hit, 2 = max hit </returns>
+	UFUNCTION(BlueprintCallable)
+	TMap<TSubclassOf<AIngredient>, int> GetRecipeInfo();
+
+	UPROPERTY()
+	URecipe* Recipe;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap<TSubclassOf<AIngredient>, int>				m_recipeInfo;
+
 protected:
 
 	// Called when the game starts or when spawned
@@ -54,11 +67,9 @@ public:
 
 
 private:
-
-	//UPROPERTY()
-	//TArray<URecipe*> m_recipies;
 	UPROPERTY()
 	TMap<FName, FIngredientInfo>	m_containingIngredients;
+
 	float							m_liquidVolume;
 	int								numIngredients;
 };
