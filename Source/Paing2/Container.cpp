@@ -36,9 +36,9 @@ bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
 	else
 		m_containingIngredients[otherName].Add(otherIngredient);
 
-	int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
-	if (val >= 0)
-		m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
+	//int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
+	//if (val >= 0)
+	//	m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
 
 	if (otherIngredient->IsLiquid())
 		m_liquidVolume += otherAmount;
@@ -89,9 +89,9 @@ bool UContainer::TryAddAmount(TSubclassOf<AIngredient> otherIngredient, float ot
 	else
 		m_containingIngredients[otherName].m_totalAmount += otherAmount;
 
-	int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
-	if (val >= 0)
-		m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
+	//int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
+	//if (val >= 0)
+	//	m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
 
 	if (otherIngredient.GetDefaultObject()->IsLiquid())
 		m_liquidVolume += otherAmount;
