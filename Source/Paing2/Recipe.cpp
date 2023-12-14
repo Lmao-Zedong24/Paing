@@ -27,12 +27,12 @@ size_t URecipe::NumCommonIngredients(const TMap<FName, FIngredientInfo>& ingredi
 
 bool URecipe::RecipieIsGood(const TMap<FName, FIngredientInfo>& ingredients)
 {
+
 	for (auto& recipeIngredient : m_ingredientListMinMax)
 	{
-		auto& name = recipeIngredient.Key.GetDefaultObject()->GetIngredientName();
-		auto ing = ingredients.Find(name);
+		auto name = recipeIngredient.Key.GetDefaultObject()->GetIngredientName();
 
-		if (ing == nullptr || EvaluateIngredient(*ing, recipeIngredient.Value))
+		if (!ingredients.Contains(name) || !EvaluateIngredient(ingredients[name], recipeIngredient.Value))
 		{
 			if (GEngine)
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString("Quality : Bad"));
@@ -56,6 +56,20 @@ bool URecipe::EvaluateQuality(const TMap<FName, FIngredientInfo>& ingredients)
 	}
 
 	return RecipieIsGood(ingredients);
+}
+
+bool URecipe::EvaluateOrder(const TMap<FName, FIngredientInfo>& ingredients)
+{
+	for (auto& ingredientInfo : ingredients)
+	{
+		if (ingredientInfo.Value.m_order >= m_order.Num() ||
+			ingredientInfo.Value.m_ing != m_order[ingredientInfo.Value.m_order])
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 const TSubclassOf<AIngredient>& URecipe::GetResult()

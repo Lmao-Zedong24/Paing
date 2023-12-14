@@ -43,16 +43,19 @@ public:
 	int EvaluateStars(bool isGoodBake);
 
 	UFUNCTION(BlueprintCallable)
+	void SetEvaluation(AIngredient* ingredient);
+
+	UFUNCTION(BlueprintCallable)
 	static FHitResult PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint);
 
 	UPROPERTY(EditAnywhere)
-	bool isGoodQuality;
+	bool isGoodQuality = true;
 
 	UPROPERTY(EditAnywhere)
-	bool isInOrder;
+	bool isInOrder = true;
 
 	UPROPERTY(EditAnywhere)
-	bool isHitFloor;
+	bool isHitFloor = false;
 
 protected:
 
@@ -75,7 +78,7 @@ struct PAING2_API FIngredientInfo
 {
 	GENERATED_BODY()
 
-	FIngredientInfo() : m_totalAmount(), m_ingredientActors() {};
+	FIngredientInfo() : m_totalAmount(), m_ingredientActors(), m_order() {};
 	FIngredientInfo(AIngredient* ingredient, size_t order) :
 		m_totalAmount(), m_order(order), m_ing(ingredient->GetClass())
 	{
@@ -85,9 +88,9 @@ struct PAING2_API FIngredientInfo
 		m_totalAmount(amount), m_order(order), m_ing(ing)
 	{};
 
-	UPROPERTY()
 	float						m_totalAmount;
 	size_t						m_order;
+	UPROPERTY()
 	TSubclassOf<AIngredient>	m_ing;
 
 	UPROPERTY()

@@ -36,7 +36,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeleteContainingIngredients();
 
-	const TMap<FName, FIngredientInfo>& GetIngredients();
+	TMap<FName, FIngredientInfo> GetIngredients();
 
 	UFUNCTION(BlueprintCallable)
 	TSet<FName> GetIngredientNames();
@@ -44,6 +44,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool GetQuality();
+
+	bool GetHitFloor();
+
+	bool GetOrder();
 
 	UFUNCTION(BlueprintCallable)
 	float GetLiquidamount();

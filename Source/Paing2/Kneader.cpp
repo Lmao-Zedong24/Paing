@@ -41,13 +41,20 @@ void AKneader::Tick(float DeltaTime)
 
 void AKneader::Craft()
 {
+	auto result = m_recipe->GetResult();
+
+	bool quality = m_recipe->EvaluateQuality(Container->GetIngredients());
+	bool order = m_recipe->EvaluateOrder(Container->GetIngredients());
+	bool hitFloor = Container->GetHitFloor();
+
 	Container->DeleteContainingIngredients();
 
-	auto& result = m_recipe->GetResult();
 	auto& transform = SpawnPoint->GetComponentTransform();
 	auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, transform);
 
-	bpIngredient->isGoodQuality = m_recipe->EvaluateQuality(Container->GetIngredients());
+	bpIngredient->isGoodQuality = quality;
+	bpIngredient->isInOrder = order;
+	bpIngredient->isHitFloor = hitFloor;
 }
 
 bool AKneader::CanCraft()

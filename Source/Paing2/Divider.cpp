@@ -42,16 +42,20 @@ void ADivider::Tick(float DeltaTime)
 
 void ADivider::Craft()
 {
-	Container->DeleteContainingIngredients();
 
 	auto result = m_recipe->GetResult();
-
 	bool quality = Container->GetQuality();
+	bool hitFloor = Container->GetHitFloor();
+	bool order = Container->GetOrder();
+
+	Container->DeleteContainingIngredients();
 
 	for (auto& pts : m_spawnPoints)
 	{
 		auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, pts->GetComponentTransform());
 		bpIngredient->isGoodQuality = quality;
+		bpIngredient->isHitFloor = hitFloor;
+		bpIngredient->isInOrder = order;
 	}
 }
 

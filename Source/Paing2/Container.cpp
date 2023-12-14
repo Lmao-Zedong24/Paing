@@ -36,9 +36,6 @@ bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
 	else
 		m_containingIngredients[otherName].Add(otherIngredient);
 
-	//int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
-	//if (val >= 0)
-	//	m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
 
 	if (otherIngredient->IsLiquid())
 		m_liquidVolume += otherAmount;
@@ -89,9 +86,6 @@ bool UContainer::TryAddAmount(TSubclassOf<AIngredient> otherIngredient, float ot
 	else
 		m_containingIngredients[otherName].m_totalAmount += otherAmount;
 
-	//int val = Recipe->GetRecipeHit(m_containingIngredients[otherName]);
-	//if (val >= 0)
-	//	m_recipeInfo.Add(m_containingIngredients[otherName].m_ing, val);
 
 	if (otherIngredient.GetDefaultObject()->IsLiquid())
 		m_liquidVolume += otherAmount;
@@ -157,7 +151,7 @@ void UContainer::DeleteContainingIngredients()
 	m_containingIngredients.Empty();
 }
 
-const TMap<FName, FIngredientInfo>& UContainer::GetIngredients()
+TMap<FName, FIngredientInfo> UContainer::GetIngredients()
 {
 	return m_containingIngredients;
 }
@@ -176,6 +170,34 @@ bool UContainer::GetQuality()
 		for (auto& ing : ingInfo.Value.m_ingredientActors)
 		{
 			if (!ing->isGoodQuality)
+				return false;
+		}
+	}
+
+	return true;
+}
+
+bool UContainer::GetHitFloor()
+{
+	for (auto& ingInfo : m_containingIngredients)
+	{
+		for (auto& ing : ingInfo.Value.m_ingredientActors)
+		{
+			if (!ing->isHitFloor)
+				return false;
+		}
+	}
+
+	return true;
+}
+
+bool UContainer::GetOrder()
+{
+	for (auto& ingInfo : m_containingIngredients)
+	{
+		for (auto& ing : ingInfo.Value.m_ingredientActors)
+		{
+			if (!ing->isInOrder)
 				return false;
 		}
 	}

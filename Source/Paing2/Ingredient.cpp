@@ -52,12 +52,24 @@ bool AIngredient::IsLiquid()
 
 int AIngredient::EvaluateStars(bool isGoodBake)
 {
-	return	isGoodQuality && isInOrder && isGoodBake ?		5:
-			!isGoodQuality && !isGoodBake ?					1:
-			!isGoodQuality && isGoodBake ?					2:
-			isGoodQuality && !isGoodBake ?					3:
-			isGoodQuality && (isInOrder || isGoodBake) ?	4: 
-															0;
+	return	!isHitFloor && isGoodQuality && isInOrder && isGoodBake ?		5:
+			isHitFloor && !isGoodBake ?										1:
+			isHitFloor && isGoodBake ?										2:
+			isGoodQuality && !isGoodBake ?									3:
+			isGoodQuality && (isInOrder || isGoodBake) ?					4: 
+																			0;
+}
+
+void AIngredient::SetEvaluation(AIngredient* ingredient)
+{
+	isGoodQuality = ingredient->isGoodQuality;
+
+
+	isInOrder = ingredient->isInOrder;
+	isHitFloor = ingredient->isHitFloor;
+
+	if (GEngine && !isInOrder)
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("NO GOOd Order"));
 }
 
 FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint)
