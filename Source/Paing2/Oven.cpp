@@ -21,6 +21,10 @@ void AOven::RemoveBakeable(AActor* actor, UBakeable* bake)
 	m_bakeables.Remove(actor);
 }
 
+void AOven::DoorState(bool isClosed)
+{
+}
+
 // Called when the game starts or when spawned	
 void AOven::BeginPlay()
 {

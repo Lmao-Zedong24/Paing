@@ -36,29 +36,44 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeleteContainingIngredients();
 
-	const TMap<FName, FIngredientInfo>& GetIngredients();
+	TMap<FName, FIngredientInfo> GetIngredients();
 
 	UFUNCTION(BlueprintCallable)
 	TSet<FName> GetIngredientNames();
 	//void PourLiquid();	
 
+	UFUNCTION(BlueprintCallable)
+	bool GetQuality();
+
+	bool GetHitFloor();
+
+	bool GetOrder();
+
+	UFUNCTION(BlueprintCallable)
+	float GetLiquidamount();
+
+	/// <returns> ingredient name, int 0 = ingredient added, 1 = Min hit, 2 = max hit </returns>
+	UFUNCTION(BlueprintCallable)
+	TMap<TSubclassOf<AIngredient>, int> GetRecipeInfo();
+
+	UPROPERTY()
+	URecipe* Recipe;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap<TSubclassOf<AIngredient>, int>				m_recipeInfo;
+
 protected:
-	UPROPERTY(BlueprintReadWrite)
-	float maxLiquidVolume;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 
 public:	
 
 
 private:
-
-
-	//UPROPERTY()
-	//TArray<URecipe*> m_recipies;
 	UPROPERTY()
 	TMap<FName, FIngredientInfo>	m_containingIngredients;
+
 	float							m_liquidVolume;
+	int								numIngredients;
 };

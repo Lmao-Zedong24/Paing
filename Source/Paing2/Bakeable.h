@@ -20,8 +20,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(Category = Default, EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<float> m_bakeTimeStamps;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<float> m_bakeStageTimeStamps;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<UMaterial*> m_bakeStageMaterial;
 
 public:	
 	// Called every frame
@@ -34,7 +37,11 @@ public:
 
 
 private:
+	UPROPERTY()
+	UStaticMeshComponent* m_mesh;
+	//UMaterialInstanceDynamic* m_dynamicMaterial;
+
+
 	float	m_bakeTime_s;
 	int		m_bakeStage;
-
 };

@@ -15,8 +15,7 @@ UContainer::UContainer(const FObjectInitializer& ObjectInitializer)
 // Called when the game starts or when spawned
 void UContainer::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
 bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
@@ -29,10 +28,14 @@ bool UContainer::TryAddIngredient(AIngredient* otherIngredient)
 
 	float currentQuantity = m_containingIngredients.FindRef(otherName).m_totalAmount;
 
-	if (currentQuantity == 0) 
-		m_containingIngredients.Add(otherName, FIngredientInfo(otherIngredient));
+	if (currentQuantity == 0)
+	{
+		m_containingIngredients.Add(otherName, FIngredientInfo(otherIngredient, numIngredients));
+		numIngredients++;
+	}
 	else
 		m_containingIngredients[otherName].Add(otherIngredient);
+
 
 	if (otherIngredient->IsLiquid())
 		m_liquidVolume += otherAmount;
@@ -55,7 +58,10 @@ bool UContainer::TryRemoveIngredient(AIngredient* otherIngredient)
 	ingredientInfo->Remove(otherIngredient);
 
 	if (ingredientInfo->m_totalAmount <= 0)
+	{
 		m_containingIngredients.Remove(name);
+		numIngredients--;
+	}
 
 	if (otherIngredient->IsLiquid())
 		m_liquidVolume -= otherIngredient->GetIngredientAmount();
@@ -73,9 +79,13 @@ bool UContainer::TryAddAmount(TSubclassOf<AIngredient> otherIngredient, float ot
 	float currentQuantity = m_containingIngredients.FindRef(otherName).m_totalAmount;
 
 	if (currentQuantity == 0)
-		m_containingIngredients.Add(otherName, FIngredientInfo(otherAmount));
+	{
+		m_containingIngredients.Add(otherName, FIngredientInfo(otherAmount, numIngredients, otherIngredient));
+		numIngredients++;
+	}
 	else
 		m_containingIngredients[otherName].m_totalAmount += otherAmount;
+
 
 	if (otherIngredient.GetDefaultObject()->IsLiquid())
 		m_liquidVolume += otherAmount;
@@ -94,7 +104,10 @@ bool UContainer::TryRemoveAmount(TSubclassOf<AIngredient> otherIngredient, float
 	ingredientInfo->m_totalAmount -= otherAmount;
 
 	if (ingredientInfo->m_totalAmount <= 0)
+	{
 		m_containingIngredients.Remove(otherName);
+		numIngredients--;
+	}
 
 	if (otherIngredient.GetDefaultObject()->IsLiquid())
 		m_liquidVolume -= otherAmount;
@@ -106,13 +119,17 @@ void UContainer::DeleteContainingIngredients()
 {
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString(TEXT("Has : ")) + FString::FromInt(m_containingIngredients.Num()));
+
+
+	m_recipeInfo.Empty();
+
 	for (auto& ingredientInfo : m_containingIngredients)
 	{
 		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString(TEXT("is : ")) + FString::FromInt(ingredientInfo.Value.m_ingredients.Num()));
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString(TEXT("is : ")) + FString::FromInt(ingredientInfo.Value.m_ingredientActors.Num()));
 
 		//reference is important
-		for (AIngredient*& ingredient : ingredientInfo.Value.m_ingredients)
+		for (AIngredient*& ingredient : ingredientInfo.Value.m_ingredientActors)
 		{
 			if (ingredient == nullptr && GEngine)
 			{
@@ -134,7 +151,7 @@ void UContainer::DeleteContainingIngredients()
 	m_containingIngredients.Empty();
 }
 
-const TMap<FName, FIngredientInfo>& UContainer::GetIngredients()
+TMap<FName, FIngredientInfo> UContainer::GetIngredients()
 {
 	return m_containingIngredients;
 }
@@ -144,6 +161,58 @@ TSet<FName> UContainer::GetIngredientNames()
 	TSet<FName> keys;
 	m_containingIngredients.GetKeys(keys);
 	return keys;
+}
+
+bool UContainer::GetQuality()
+{
+	for (auto& ingInfo : m_containingIngredients)
+	{
+		for (auto& ing : ingInfo.Value.m_ingredientActors)
+		{
+			if (!ing->isGoodQuality)
+				return false;
+		}
+	}
+
+	return true;
+}
+
+bool UContainer::GetHitFloor()
+{
+	for (auto& ingInfo : m_containingIngredients)
+	{
+		for (auto& ing : ingInfo.Value.m_ingredientActors)
+		{
+			if (!ing->isHitFloor)
+				return false;
+		}
+	}
+
+	return true;
+}
+
+bool UContainer::GetOrder()
+{
+	for (auto& ingInfo : m_containingIngredients)
+	{
+		for (auto& ing : ingInfo.Value.m_ingredientActors)
+		{
+			if (!ing->isInOrder)
+				return false;
+		}
+	}
+
+	return true;
+}
+
+float UContainer::GetLiquidamount()
+{
+	return m_liquidVolume;
+}
+
+TMap<TSubclassOf<AIngredient>, int> UContainer::GetRecipeInfo()
+{
+	return m_recipeInfo;
 }
 
 

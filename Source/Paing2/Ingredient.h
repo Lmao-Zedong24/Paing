@@ -12,24 +12,6 @@
 constexpr float MAX_TRACE_LENGTH = 5000.0f;
 constexpr ECollisionChannel TraceChannelProperty = ECC_PhysicsBody;
 
-USTRUCT()
-struct PAING2_API FIngredientInfo
-{
-	GENERATED_BODY()
-
-	FIngredientInfo() : m_totalAmount(), m_ingredients() {};
-	FIngredientInfo(AIngredient* ingredient) : m_totalAmount(), m_ingredients() { Add(ingredient); };
-	FIngredientInfo(float amount) : m_totalAmount(amount), m_ingredients() {};
-
-	float					m_totalAmount;
-
-	UPROPERTY()
-	TSet<AIngredient*>		m_ingredients;
-
-	void Add(AIngredient* ingredient);
-	void Remove(AIngredient* ingredient);
-};
-
 
 UCLASS()
 class PAING2_API AIngredient : public AActor
@@ -55,17 +37,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
 	bool IsLiquid();
 
-	/// <param name="qualityPercent"> float from 0.0 to 100.0 inclusive</param>
-	void AddQualityPercent(float qualityPercent);
+	UFUNCTION(BlueprintCallable)
+	int EvaluateStars(bool isGoodBake);
 
-	/// <returns>from 0.0 to 100.0 inclusive</returns>
-	float GetAverageQualityPercent();
+	UFUNCTION(BlueprintCallable)
+	void SetEvaluation(AIngredient* ingredient);
 
 	UFUNCTION(BlueprintCallable)
 	static FHitResult PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint);
+
+	UPROPERTY(EditAnywhere)
+	bool isGoodQuality = true;
+
+	UPROPERTY(EditAnywhere)
+	bool isInOrder = true;
+
+	UPROPERTY(EditAnywhere)
+	bool isHitFloor = false;
 
 protected:
 
@@ -80,4 +70,32 @@ protected:
 
 private:
 
+};
+
+
+USTRUCT()
+struct PAING2_API FIngredientInfo
+{
+	GENERATED_BODY()
+
+	FIngredientInfo() : m_totalAmount(), m_ingredientActors(), m_order() {};
+	FIngredientInfo(AIngredient* ingredient, size_t order) :
+		m_totalAmount(), m_order(order), m_ing(ingredient->GetClass())
+	{
+		Add(ingredient);
+	};
+	FIngredientInfo(float amount, size_t order, TSubclassOf<AIngredient> ing) :
+		m_totalAmount(amount), m_order(order), m_ing(ing)
+	{};
+
+	float						m_totalAmount;
+	size_t						m_order;
+	UPROPERTY()
+	TSubclassOf<AIngredient>	m_ing;
+
+	UPROPERTY()
+	TSet<AIngredient*>		m_ingredientActors;
+
+	void Add(AIngredient* ingredient);
+	void Remove(AIngredient* ingredient);
 };

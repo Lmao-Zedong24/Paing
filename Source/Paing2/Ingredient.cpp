@@ -50,27 +50,23 @@ bool AIngredient::IsLiquid()
 	return m_isLiquid;
 }
 
-void AIngredient::AddQualityPercent(float qualityPercent)
+int AIngredient::EvaluateStars(bool isGoodBake)
 {
-	qualityPercent = std::clamp(qualityPercent, 0.0f, 100.0f);
-
-	m_individualQualityPercents.emplace_back(qualityPercent);
+	return	!isHitFloor && isGoodQuality && isInOrder && isGoodBake ?		5:
+			isHitFloor && !isGoodBake ?										1:
+			isHitFloor && isGoodBake ?										2:
+			isGoodQuality && (isInOrder || isGoodBake) ?					4: 
+																			3;
 }
 
-float AIngredient::GetAverageQualityPercent()
+void AIngredient::SetEvaluation(AIngredient* ingredient)
 {
-	if (m_individualQualityPercents.empty())
-		return 100.0f;
+	isGoodQuality = ingredient->isGoodQuality;
+	isInOrder = ingredient->isInOrder;
+	isHitFloor = ingredient->isHitFloor;
 
-	size_t lenght = 0;
-	float averagePercent = 0;
-	for (auto& percent : m_individualQualityPercents)
-	{
-		averagePercent += percent;
-		lenght++;
-	}
-
-	return averagePercent / lenght;
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::FromInt(isGoodQuality) + FString::FromInt(isInOrder) + FString::FromInt(!isHitFloor));
 }
 
 FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> liquid, float amount, FVector startPoint)
@@ -98,7 +94,7 @@ FHitResult AIngredient::PourLiquidTrace(AActor* actor, TSubclassOf<AIngredient> 
 void FIngredientInfo::Add(AIngredient* ingredient)
 {
 	bool isInSet = false;
-	auto i = m_ingredients.FindOrAdd(ingredient, &isInSet);
+	auto i = m_ingredientActors.FindOrAdd(ingredient, &isInSet);
 	
 	if (isInSet)
 		return;
@@ -108,7 +104,7 @@ void FIngredientInfo::Add(AIngredient* ingredient)
 
 void FIngredientInfo::Remove(AIngredient* ingredient)
 {
-	int num = m_ingredients.Remove(ingredient);
+	int num = m_ingredientActors.Remove(ingredient);
 
 	if (num != 0)
 		m_totalAmount -= ingredient->GetIngredientAmount();

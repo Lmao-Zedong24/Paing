@@ -30,7 +30,7 @@ void AKneader::BeginPlay()
 	if (m_recipe == nullptr && GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("SET RECIPE"));
 
-	
+	Container->Recipe = m_recipe;
 }
 
 // Called every frame
@@ -41,17 +41,30 @@ void AKneader::Tick(float DeltaTime)
 
 void AKneader::Craft()
 {
+	auto result = m_recipe->GetResult();
+
+	bool quality = m_recipe->EvaluateQuality(Container->GetIngredients());
+	bool order = m_recipe->EvaluateOrder(Container->GetIngredients());
+	bool hitFloor = Container->GetHitFloor();
+
 	Container->DeleteContainingIngredients();
 
-	auto& result = m_recipe->GetResult();
 	auto& transform = SpawnPoint->GetComponentTransform();
 	auto bpIngredient = GetWorld()->SpawnActor<AIngredient>(result, transform);
+
+	bpIngredient->isGoodQuality = quality;
+	bpIngredient->isInOrder = order;
+	bpIngredient->isHitFloor = hitFloor;
 }
 
 bool AKneader::CanCraft()
 {
-	float quality = m_recipe->EvaluateQuality(Container->GetIngredients());
+	size_t num = m_recipe->NumCommonIngredients(Container->GetIngredients());
 
-	return quality == 100;
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(num));
+
+
+	return num != 0;
 }
 
