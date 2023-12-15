@@ -35,7 +35,7 @@ bool URecipe::RecipieIsGood(const TMap<FName, FIngredientInfo>& ingredients)
 		if (!ingredients.Contains(name) || !EvaluateIngredient(ingredients[name], recipeIngredient.Value))
 		{
 			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString("Quality : Bad"));
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString("Quality Bad : ") + name.ToString());
 
 			return false;
 		}
