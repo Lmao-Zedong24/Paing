@@ -1,4 +1,4 @@
-# No Paing No Gain
+# Paing - No Paing No Gain
 ## Baking Simulation VR Game built with Unreal Engine 5.
 
 This is a ISART Digital school project focused on creating a stationary VR game. 
